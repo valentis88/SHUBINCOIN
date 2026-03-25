@@ -206,16 +206,19 @@ animation: fill-gas 4s ease-out 1s forwards;
 /* ——— CTA ——— */
 .cta {
 display:inline-block;
-color: #0a0806 !important;
 font-family:‘Courier New’,‘Courier’,monospace;
 font-size:.8rem; letter-spacing:.2em; text-transform:uppercase;
-color: var(–coal);
-background: linear-gradient(90deg, var(–ember), var(–ember2));
+color: #0a0806 !important;
+background: #e8650a !important;
+background-image: linear-gradient(90deg, #e8650a, #f5a020) !important;
 padding:1rem 2.8rem;
-text-decoration:none;
+text-decoration:none !important;
 clip-path: polygon(14px 0%,100% 0%,calc(100% - 14px) 100%,0% 100%);
 transition: box-shadow .3s, filter .3s;
 position:relative; overflow:hidden;
+border: none;
+cursor: pointer;
+font-weight: bold;
 }
 .cta::after {
 content:’’;
@@ -534,7 +537,7 @@ background:linear-gradient(to right,var(–ember),rgba(232,101,10,.05)); }
 <div class="ticker">$SHUBIN</div>
 <div class="tagline">Господар шахти. Суддя жадібних. Захисник чесних.</div>
 
-<a href="https://pump.fun/coin/4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump" class="cta" target="_blank">Спуститись в Шахту</a>
+<a href="https://pump.fun/coin/4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump" class="cta" target="_blank" style="background:linear-gradient(90deg,#e8650a,#f5a020) !important;color:#0a0806 !important;display:inline-block;font-weight:bold;">Спуститись в Шахту</a>
 
 <div class="gas-bar">
   <span>CH₄</span>
@@ -697,7 +700,7 @@ background:linear-gradient(to right,var(–ember),rgba(232,101,10,.05)); }
     </p>
     <br>
     <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-      <a href="https://pump.fun/coin/4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump" class="cta" target="_blank">⛏ Купити на Pump.fun</a>
+      <a href="https://pump.fun/coin/4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump" class="cta" target="_blank" style="background:#e8650a !important;color:#0a0806 !important;display:inline-block;">⛏ Купити на Pump.fun</a>
       <a href="https://dexscreener.com/solana/4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump" class="cta" target="_blank" style="background:linear-gradient(90deg,#1a6e3a,#2aff8c);color:#050e07 !important;">📈 DEXScreener</a>
     </div>
     <div class="ca-box">
