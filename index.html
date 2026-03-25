@@ -5,12 +5,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>$SHUBIN — Дух Донецьких Шахт</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@700;900&family=Crimson+Text:ital,wght@0,400;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Crimson+Text:ital,wght@0,400;1,400&family=Share+Tech+Mono&display=swap');
-</style>
 <style>
 :root {
   --coal:    #0a0806;
@@ -35,7 +29,7 @@ body {
 background: #0a0806;
 background-image: radial-gradient(ellipse at 50% 30%, rgba(232,101,10,0.07) 0%, transparent 65%);
 color: var(–ash);
-font-family: ‘Crimson Text’, ‘Georgia’, serif;
+font-family:‘Georgia’,‘Times New Roman’,serif;
 overflow-x: hidden;
 cursor: default;
 }
@@ -62,7 +56,7 @@ padding: 1rem 3rem;
 background: linear-gradient(to bottom, rgba(10,8,6,0.95), transparent);
 }
 .nav-logo {
-font-family:‘Cinzel’, ‘Georgia’, serif;
+font-family:‘Palatino Linotype’,‘Book Antiqua’,‘Palatino’,‘Georgia’,serif;
 font-size:1.1rem;
 color: var(–ember);
 letter-spacing:.1em;
@@ -70,14 +64,14 @@ filter: drop-shadow(0 0 8px rgba(232,101,10,0.5));
 }
 .nav-links { display:flex; gap:2rem; }
 .nav-links a {
-font-family:‘Share Tech Mono’, monospace;
+font-family:‘Courier New’,‘Courier’,monospace;
 font-size:.65rem; letter-spacing:.25em; text-transform:uppercase;
 color: rgba(196,180,154,0.4); text-decoration:none;
 transition: color .3s;
 }
 .nav-links a:hover { color: var(–ember2); }
 .nav-btn {
-font-family:‘Share Tech Mono’, monospace;
+font-family:‘Courier New’,‘Courier’,monospace;
 font-size:.65rem; letter-spacing:.18em; text-transform:uppercase;
 background: var(–ember); color: var(–coal);
 padding:.5rem 1.3rem; text-decoration:none;
@@ -143,10 +137,10 @@ pointer-events:none;
 }
 
 .ticker {
-font-family:‘Cinzel’, ‘Georgia’, serif;
+font-family:‘Palatino Linotype’,‘Book Antiqua’,‘Palatino’,‘Georgia’,serif;
 font-size: clamp(4rem, 10vw, 8rem);
 font-weight:400;
-letter-spacing:.06em;
+letter-spacing:.12em;
 background: linear-gradient(160deg, var(–ember2) 0%, var(–ember) 40%, var(–gold) 70%, var(–ember2) 100%);
 -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
 filter: drop-shadow(0 0 30px rgba(232,101,10,.45));
@@ -169,7 +163,7 @@ max-width:560px;
 }
 
 .hero-sub {
-font-family:‘Share Tech Mono’, monospace;
+font-family:‘Courier New’,‘Courier’,monospace;
 font-size:.7rem; letter-spacing:.3em;
 color: rgba(232,101,10,.4); text-transform:uppercase;
 margin-top:3.5rem;
@@ -181,7 +175,7 @@ animation: blink-slow 3s step-end infinite;
 .gas-bar {
 display:flex; align-items:center; gap:1rem;
 margin-top:2rem;
-font-family:‘Share Tech Mono’,monospace;
+font-family:‘Courier New’,‘Courier’,monospace;
 font-size:.6rem; letter-spacing:.2em; color:rgba(42,255,140,.4);
 }
 .gas-fill {
@@ -203,7 +197,7 @@ animation: fill-gas 4s ease-out 1s forwards;
 /* ——— CTA ——— */
 .cta {
 display:inline-block;
-font-family:‘Share Tech Mono’, monospace;
+font-family:‘Courier New’,‘Courier’,monospace;
 font-size:.8rem; letter-spacing:.2em; text-transform:uppercase;
 color: var(–coal);
 background: linear-gradient(90deg, var(–ember), var(–ember2));
@@ -238,14 +232,14 @@ margin:0 auto;
 }
 
 .s-label {
-font-family:‘Share Tech Mono’, monospace;
+font-family:‘Courier New’,‘Courier’,monospace;
 font-size:.6rem; letter-spacing:.4em;
 color: rgba(200,144,42,.45); text-transform:uppercase;
 margin-bottom:1.2rem;
 }
 
 h2 {
-font-family:‘Cinzel’, ‘Georgia’, serif;
+font-family:‘Palatino Linotype’,‘Book Antiqua’,‘Palatino’,‘Georgia’,serif;
 font-size: clamp(1.8rem, 4vw, 3rem);
 color: var(–light);
 line-height:1.25;
@@ -270,7 +264,7 @@ margin-top:3.5rem;
 }
 .s-card {
 background: linear-gradient(135deg, rgba(40,28,18,.95), rgba(25,18,12,.98));
-border:1px solid rgba(200,144,42,.4);
+border:2px solid rgba(200,144,42,.6);
 padding:2rem 1.8rem;
 position:relative;
 transition: border-color .4s, transform .4s;
@@ -278,13 +272,13 @@ transition: border-color .4s, transform .4s;
 .s-card::before {
 content:’’;
 position:absolute; top:0; left:0;
-width:3px; height:100%;
-background: linear-gradient(to bottom, var(–ember), transparent);
+width:4px; height:100%;
+background: linear-gradient(to bottom, var(–ember2), var(–ember), transparent);
 }
 .s-card:hover { border-color:rgba(200,144,42,.3); transform:translateX(4px); }
 .card-icon { font-size:2rem; margin-bottom:.8rem; }
 .card-title {
-font-family:‘Cinzel’, ‘Georgia’, serif;
+font-family:‘Palatino Linotype’,‘Book Antiqua’,‘Palatino’,‘Georgia’,serif;
 font-size:1rem; color: var(–gold);
 margin-bottom:.7rem;
 }
@@ -317,14 +311,14 @@ transition:background .3s;
 }
 .stat:hover { background:rgba(232,101,10,.05); }
 .stat-n {
-font-family:‘Cinzel’, ‘Georgia’, serif;
+font-family:‘Palatino Linotype’,‘Book Antiqua’,‘Palatino’,‘Georgia’,serif;
 font-size: clamp(1.4rem,2.5vw,2rem);
 color: var(–ember);
 display:block; margin-bottom:.4rem;
 filter:drop-shadow(0 0 6px rgba(232,101,10,.4));
 }
 .stat-l {
-font-family:‘Share Tech Mono’, monospace;
+font-family:‘Courier New’,‘Courier’,monospace;
 font-size:.58rem; letter-spacing:.22em;
 color:rgba(196,180,154,.3); text-transform:uppercase;
 }
@@ -343,7 +337,7 @@ position:relative;
 }
 .voice::before {
 content:’”’;
-font-family:‘Cinzel’, ‘Georgia’, serif;
+font-family:‘Palatino Linotype’,‘Book Antiqua’,‘Palatino’,‘Georgia’,serif;
 font-size:4rem; color:rgba(232,101,10,.08);
 position:absolute; top:-1rem; left:1rem;
 line-height:1;
@@ -353,7 +347,7 @@ font-size:1rem; font-style:italic;
 line-height:1.9; color:rgba(196,180,154,.65);
 }
 .voice-attr {
-font-family:‘Share Tech Mono’, monospace;
+font-family:‘Courier New’,‘Courier’,monospace;
 font-size:.58rem; letter-spacing:.2em;
 color:rgba(200,144,42,.35);
 margin-top:.7rem; text-transform:uppercase;
@@ -396,13 +390,13 @@ background:var(–shaft);
 }
 .d-phase.lit::before { background:var(–ember); box-shadow:0 0 8px var(–ember); }
 .d-depth {
-font-family:‘Share Tech Mono’, monospace;
+font-family:‘Courier New’,‘Courier’,monospace;
 font-size:.58rem; letter-spacing:.3em;
 color:rgba(200,144,42,.4);
 margin-bottom:.3rem; text-transform:uppercase;
 }
 .d-title {
-font-family:‘Cinzel’, ‘Georgia’, serif;
+font-family:‘Palatino Linotype’,‘Book Antiqua’,‘Palatino’,‘Georgia’,serif;
 font-size:1rem; color:var(–gold);
 margin-bottom:.5rem;
 }
@@ -419,7 +413,7 @@ padding:.2rem 0;
 .ca-box {
 display:inline-block;
 margin-top:1.5rem;
-font-family:‘Share Tech Mono’, monospace;
+font-family:‘Courier New’,‘Courier’,monospace;
 font-size:.68rem; letter-spacing:.18em;
 color:rgba(200,144,42,.5);
 border:1px solid rgba(200,144,42,.12);
@@ -435,7 +429,7 @@ background:rgba(232,101,10,.03);
 border-top:1px solid rgba(232,101,10,.08);
 padding:2rem;
 text-align:center;
-font-family:‘Share Tech Mono’,monospace;
+font-family:‘Courier New’,‘Courier’,monospace;
 font-size:.58rem; letter-spacing:.15em;
 color:rgba(196,180,154,.25); line-height:2;
 }
@@ -443,7 +437,7 @@ color:rgba(196,180,154,.25); line-height:2;
 /* ——— FOOTER ——— */
 footer {
 padding:2.5rem 2rem; text-align:center;
-font-family:‘Share Tech Mono’,monospace;
+font-family:‘Courier New’,‘Courier’,monospace;
 font-size:.6rem; letter-spacing:.2em;
 color:rgba(196,180,154,.15);
 }
@@ -607,9 +601,9 @@ background:linear-gradient(to right,var(–ember),rgba(232,101,10,.05)); }
         Контракт на Pump.fun. Mint authority — немає. Шубін не продається. Шахта — спільна.
       </p>
       <div style="margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap;">
-        <a href="https://pump.fun/coin/4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump" target="_blank" style="font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.2em;color:rgba(232,101,10,.6);border:1px solid rgba(232,101,10,.2);padding:.4rem 1rem;text-decoration:none;transition:all .3s;" onmouseover="this.style.borderColor='rgba(232,101,10,.5)';this.style.color='rgba(245,160,32,.9)'" onmouseout="this.style.borderColor='rgba(232,101,10,.2)';this.style.color='rgba(232,101,10,.6)'">⛏ Pump.fun</a>
-        <a href="https://dexscreener.com/solana/4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump" target="_blank" style="font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.2em;color:rgba(42,255,140,.5);border:1px solid rgba(42,255,140,.15);padding:.4rem 1rem;text-decoration:none;transition:all .3s;" onmouseover="this.style.borderColor='rgba(42,255,140,.4)';this.style.color='rgba(42,255,140,.9)'" onmouseout="this.style.borderColor='rgba(42,255,140,.15)';this.style.color='rgba(42,255,140,.5)'">📈 DEXScreener</a>
-        <a href="https://solscan.io/token/4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump" target="_blank" style="font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.2em;color:rgba(196,180,154,.35);border:1px solid rgba(196,180,154,.1);padding:.4rem 1rem;text-decoration:none;transition:all .3s;" onmouseover="this.style.borderColor='rgba(196,180,154,.3)';this.style.color='rgba(196,180,154,.7)'" onmouseout="this.style.borderColor='rgba(196,180,154,.1)';this.style.color='rgba(196,180,154,.35)'">🔍 Solscan</a>
+        <a href="https://pump.fun/coin/4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump" target="_blank" style="font-family:'Courier New','Courier',monospace;font-size:.6rem;letter-spacing:.2em;color:rgba(232,101,10,.6);border:1px solid rgba(232,101,10,.2);padding:.4rem 1rem;text-decoration:none;transition:all .3s;" onmouseover="this.style.borderColor='rgba(232,101,10,.5)';this.style.color='rgba(245,160,32,.9)'" onmouseout="this.style.borderColor='rgba(232,101,10,.2)';this.style.color='rgba(232,101,10,.6)'">⛏ Pump.fun</a>
+        <a href="https://dexscreener.com/solana/4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump" target="_blank" style="font-family:'Courier New','Courier',monospace;font-size:.6rem;letter-spacing:.2em;color:rgba(42,255,140,.5);border:1px solid rgba(42,255,140,.15);padding:.4rem 1rem;text-decoration:none;transition:all .3s;" onmouseover="this.style.borderColor='rgba(42,255,140,.4)';this.style.color='rgba(42,255,140,.9)'" onmouseout="this.style.borderColor='rgba(42,255,140,.15)';this.style.color='rgba(42,255,140,.5)'">📈 DEXScreener</a>
+        <a href="https://solscan.io/token/4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump" target="_blank" style="font-family:'Courier New','Courier',monospace;font-size:.6rem;letter-spacing:.2em;color:rgba(196,180,154,.35);border:1px solid rgba(196,180,154,.1);padding:.4rem 1rem;text-decoration:none;transition:all .3s;" onmouseover="this.style.borderColor='rgba(196,180,154,.3)';this.style.color='rgba(196,180,154,.7)'" onmouseout="this.style.borderColor='rgba(196,180,154,.1)';this.style.color='rgba(196,180,154,.35)'">🔍 Solscan</a>
       </div>
     </div>
   </div>
