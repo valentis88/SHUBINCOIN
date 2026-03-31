@@ -1,1 +1,762 @@
+<!DOCTYPE html>
 
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>$SHUBIN — AI Оракул & Live Дані</title>
+<!-- Open Graph для вірусного шерингу -->
+<meta property="og:title" content="$SHUBIN — Дух Шахти Говорить"/>
+<meta property="og:description" content="Запитай духа донецьких шахт. AI оракул $SHUBIN відповідає з глибини 847м."/>
+<meta property="og:image" content="https://valentis88.github.io/SHUBINCOIN/og.png"/>
+<meta property="og:url" content="https://valentis88.github.io/SHUBINCOIN/shubin-ai.html"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="$SHUBIN Oracle — Дух Шахти Говорить"/>
+<meta name="twitter:description" content="Запитай Шубіна. Він бачить глибше за будь-який аналітик."/>
+<style>
+:root {
+  --coal: #080604;
+  --ember: #e8650a;
+  --ember2: #f5a020;
+  --gold: #c8902a;
+  --ash: #c4b49a;
+  --methane: #2aff8c;
+  --light: #f0ddb8;
+  --red: #ff4455;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { background:#080604; }
+body {
+  background:#080604;
+  color: var(--ash);
+  font-family: 'Georgia','Times New Roman',serif;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+a { color:inherit; text-decoration:none; }
+
+canvas#bg { position:fixed; inset:0; z-index:0; pointer-events:none; }
+
+body::before {
+content:’’; position:fixed; inset:0; z-index:1; pointer-events:none;
+background: url(“data:image/svg+xml,%3Csvg viewBox=‘0 0 256 256’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cfilter id=‘n’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.9’ numOctaves=‘4’/%3E%3C/filter%3E%3Crect width=‘100%25’ height=‘100%25’ filter=‘url(%23n)’ opacity=‘0.04’/%3E%3C/svg%3E”);
+opacity:.5;
+}
+
+.page { position:relative; z-index:2; max-width:1100px; margin:0 auto; padding:2rem 1.5rem 4rem; }
+
+/* NAV */
+.topbar {
+display:flex; justify-content:space-between; align-items:center;
+padding:1rem 1.5rem;
+position:fixed; top:0; left:0; right:0; z-index:100;
+background:linear-gradient(to bottom, rgba(8,6,4,.95), transparent);
+}
+.logo {
+font-family:‘Palatino Linotype’,‘Palatino’,serif;
+font-size:1.1rem; font-weight:700;
+color:#f5a020;
+text-shadow:0 0 10px rgba(232,101,10,.5);
+}
+.back-btn {
+font-family:‘Courier New’,monospace;
+font-size:.6rem; letter-spacing:.2em; text-transform:uppercase;
+color:rgba(196,180,154,.4); border:1px solid rgba(196,180,154,.15);
+padding:.4rem .9rem; transition:all .3s;
+}
+.back-btn:hover { color:var(–ember2); border-color:rgba(232,101,10,.4); }
+
+/* HERO */
+.hero-ai {
+text-align:center;
+padding:7rem 1rem 3rem;
+}
+.hero-ai h1 {
+font-family:‘Palatino Linotype’,‘Palatino’,serif;
+font-size:clamp(2rem,5vw,3.5rem);
+color:#f5a020;
+font-weight:700;
+text-shadow:0 0 30px rgba(232,101,10,.6), 0 0 60px rgba(232,101,10,.3);
+margin-bottom:.5rem;
+}
+.hero-ai .sub {
+font-size:.95rem; font-style:italic;
+color:rgba(196,180,154,.5); letter-spacing:.1em;
+}
+
+/* LIVE STATS */
+.stats-section {
+margin:2.5rem 0;
+}
+.stats-title {
+font-family:‘Courier New’,monospace;
+font-size:.6rem; letter-spacing:.4em;
+color:rgba(42,255,140,.5); text-transform:uppercase;
+text-align:center; margin-bottom:1.2rem;
+display:flex; align-items:center; justify-content:center; gap:.8rem;
+}
+.live-dot {
+width:6px; height:6px; border-radius:50%;
+background:var(–methane);
+box-shadow:0 0 8px var(–methane);
+animation:pulse-live 1.5s ease-in-out infinite;
+}
+@keyframes pulse-live {
+0%,100%{opacity:1;transform:scale(1);}
+50%{opacity:.4;transform:scale(1.4);}
+}
+
+.stats-grid {
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:1px;
+background:rgba(200,144,42,.08);
+}
+.stat-box {
+background:#100d09;
+padding:1.5rem 1rem;
+text-align:center;
+transition:background .3s;
+position:relative;
+overflow:hidden;
+}
+.stat-box::after {
+content:’’;
+position:absolute; bottom:0; left:0; right:0;
+height:2px;
+background:linear-gradient(to right, transparent, rgba(232,101,10,.3), transparent);
+}
+.stat-box:hover { background:rgba(232,101,10,.05); }
+.stat-val {
+font-family:‘Palatino Linotype’,serif;
+font-size:clamp(1.2rem,2.5vw,1.8rem);
+color:#f5a020;
+font-weight:700;
+display:block; margin-bottom:.3rem;
+text-shadow:0 0 10px rgba(232,101,10,.4);
+}
+.stat-val.loading { color:rgba(200,144,42,.3); animation:shimmer-load 1.5s ease-in-out infinite; }
+@keyframes shimmer-load { 0%,100%{opacity:.3;} 50%{opacity:.8;} }
+.stat-lbl {
+font-family:‘Courier New’,monospace;
+font-size:.55rem; letter-spacing:.2em;
+color:rgba(196,180,154,.3); text-transform:uppercase;
+}
+.stat-change {
+font-family:‘Courier New’,monospace;
+font-size:.6rem; margin-top:.2rem;
+display:block;
+}
+.stat-change.up { color:#2aff8c; }
+.stat-change.down { color:#ff4455; }
+
+.refresh-btn {
+display:block; margin:.8rem auto 0;
+font-family:‘Courier New’,monospace;
+font-size:.55rem; letter-spacing:.2em; text-transform:uppercase;
+color:rgba(42,255,140,.4); background:transparent;
+border:none; cursor:pointer; transition:color .3s;
+}
+.refresh-btn:hover { color:var(–methane); }
+
+/* SHUBINS PROPHECY */
+.prophecy-section {
+margin:3rem 0;
+background:linear-gradient(135deg, rgba(28,21,14,.9), rgba(16,13,9,.95));
+border:1px solid rgba(200,144,42,.12);
+border-left:3px solid var(–ember);
+padding:2rem;
+position:relative;
+}
+.prophecy-section::before {
+content:‘ПРОРОЦТВО ШУБІНА’;
+position:absolute; top:-.6rem; left:1.5rem;
+font-family:‘Courier New’,monospace;
+font-size:.55rem; letter-spacing:.3em;
+color:rgba(200,144,42,.5);
+background:#100d09; padding:0 .5rem;
+}
+.prophecy-text {
+font-size:1.05rem; font-style:italic;
+line-height:1.9; color:rgba(240,221,184,.75);
+min-height:60px;
+position:relative;
+}
+.prophecy-text.loading::after {
+content:’’;
+display:inline-block; width:8px; height:14px;
+background:var(–ember); margin-left:4px;
+animation:blink-cur 1s step-end infinite;
+vertical-align:text-bottom;
+}
+@keyframes blink-cur { 0%,100%{opacity:1;} 50%{opacity:0;} }
+.prophecy-meta {
+font-family:‘Courier New’,monospace;
+font-size:.58rem; letter-spacing:.2em;
+color:rgba(200,144,42,.35);
+margin-top:.8rem; text-transform:uppercase;
+}
+.gen-prophecy-btn {
+margin-top:1rem;
+font-family:‘Courier New’,monospace;
+font-size:.65rem; letter-spacing:.18em; text-transform:uppercase;
+background:transparent; border:1px solid rgba(232,101,10,.3);
+color:rgba(232,101,10,.6); padding:.5rem 1.2rem;
+cursor:pointer; transition:all .3s;
+}
+.gen-prophecy-btn:hover { border-color:var(–ember); color:var(–ember2); }
+.gen-prophecy-btn:disabled { opacity:.3; cursor:not-allowed; }
+
+/* SHARE BUTTONS */
+.share-row {
+display:flex; gap:.8rem; flex-wrap:wrap; margin-top:1rem;
+}
+.share-btn {
+font-family:‘Courier New’,monospace;
+font-size:.6rem; letter-spacing:.15em; text-transform:uppercase;
+padding:.45rem 1rem; border:none; cursor:pointer;
+transition:all .3s; display:flex; align-items:center; gap:.4rem;
+}
+.share-twitter { background:rgba(29,161,242,.15); color:rgba(29,161,242,.8); border:1px solid rgba(29,161,242,.2); }
+.share-twitter:hover { background:rgba(29,161,242,.25); color:#1da1f2; }
+.share-telegram { background:rgba(0,136,204,.15); color:rgba(0,136,204,.8); border:1px solid rgba(0,136,204,.2); }
+.share-telegram:hover { background:rgba(0,136,204,.25); color:#0088cc; }
+.share-copy { background:rgba(200,144,42,.1); color:rgba(200,144,42,.6); border:1px solid rgba(200,144,42,.2); }
+.share-copy:hover { background:rgba(200,144,42,.2); color:var(–gold); }
+
+/* ORACLE CHAT */
+.oracle-section { margin:3rem 0; }
+.section-label {
+font-family:‘Courier New’,monospace;
+font-size:.6rem; letter-spacing:.35em;
+color:rgba(200,144,42,.45); text-transform:uppercase;
+margin-bottom:1.2rem; display:flex; align-items:center; gap:.8rem;
+}
+.section-label::after {
+content:’’; flex:1; height:1px;
+background:linear-gradient(to right, rgba(200,144,42,.2), transparent);
+}
+
+.chat-wrap {
+background:rgba(16,13,9,.8);
+border:1px solid rgba(200,144,42,.1);
+}
+.chat-msgs {
+min-height:220px; max-height:360px;
+overflow-y:auto; padding:1.5rem;
+scroll-behavior:smooth;
+}
+.chat-msgs::-webkit-scrollbar { width:2px; }
+.chat-msgs::-webkit-scrollbar-thumb { background:rgba(200,144,42,.2); }
+
+.msg-user { display:flex; justify-content:flex-end; margin-bottom:1rem; }
+.msg-user .bub {
+background:rgba(232,101,10,.1);
+border:1px solid rgba(232,101,10,.2);
+padding:.6rem 1rem; max-width:75%;
+font-size:.9rem; color:rgba(240,221,184,.8);
+clip-path:polygon(6px 0%,100% 0%,100% 100%,0% 100%,0% 6px);
+}
+.msg-bot { display:flex; gap:.7rem; align-items:flex-start; margin-bottom:1rem; }
+.bot-icon { font-size:1.3rem; flex-shrink:0; margin-top:.1rem; filter:drop-shadow(0 0 5px rgba(232,101,10,.4)); }
+.msg-bot .bub {
+background:rgba(28,21,14,.7);
+border:1px solid rgba(200,144,42,.1);
+border-left:2px solid rgba(200,144,42,.3);
+padding:.7rem 1rem; max-width:85%;
+font-size:.93rem; font-style:italic;
+line-height:1.85; color:rgba(196,180,154,.8);
+}
+.msg-bot .bub .who {
+font-family:‘Courier New’,monospace;
+font-size:.52rem; letter-spacing:.2em;
+color:rgba(200,144,42,.35); font-style:normal;
+margin-bottom:.3rem; display:block;
+}
+.typing { display:flex; gap:3px; padding:.3rem 0; }
+.typing span {
+width:4px; height:4px; border-radius:50%;
+background:rgba(200,144,42,.4);
+animation:dot .9s ease-in-out infinite;
+}
+.typing span:nth-child(2){animation-delay:.15s;}
+.typing span:nth-child(3){animation-delay:.3s;}
+@keyframes dot { 0%,80%,100%{transform:translateY(0);opacity:.4;} 40%{transform:translateY(-4px);opacity:1;} }
+
+.welcome-msg {
+text-align:center; padding:2rem 1rem;
+font-style:italic; font-size:.9rem;
+color:rgba(196,180,154,.35); line-height:1.8;
+}
+
+/* INPUT */
+.chat-input-row {
+display:flex; gap:.7rem;
+border-top:1px solid rgba(200,144,42,.08);
+padding:1rem;
+}
+.chat-input {
+flex:1; background:transparent;
+border:none; border-bottom:1px solid rgba(200,144,42,.2);
+color:var(–light); font-family:‘Georgia’,serif;
+font-size:.9rem; font-style:italic;
+padding:.4rem .2rem; outline:none;
+transition:border-color .3s;
+}
+.chat-input::placeholder { color:rgba(196,180,154,.2); font-style:italic; }
+.chat-input:focus { border-color:rgba(200,144,42,.4); }
+.send-btn {
+font-family:‘Courier New’,monospace;
+font-size:.62rem; letter-spacing:.15em; text-transform:uppercase;
+background:#e8650a; color:#080604;
+border:none; padding:.6rem 1.2rem; cursor:pointer;
+font-weight:bold;
+clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);
+transition:filter .3s, box-shadow .3s;
+}
+.send-btn:hover { filter:brightness(1.15); box-shadow:0 0 15px rgba(232,101,10,.4); }
+.send-btn:disabled { opacity:.3; cursor:not-allowed; }
+
+/* QUICK QUESTIONS */
+.quick-wrap { padding:.8rem 1rem; border-top:1px solid rgba(200,144,42,.05); }
+.quick-label {
+font-family:‘Courier New’,monospace;
+font-size:.52rem; letter-spacing:.25em;
+color:rgba(200,144,42,.25); text-transform:uppercase;
+margin-bottom:.5rem;
+}
+.quick-btns { display:flex; flex-wrap:wrap; gap:.4rem; }
+.q-btn {
+font-family:‘Georgia’,serif;
+font-size:.75rem; font-style:italic;
+background:transparent; border:1px solid rgba(200,144,42,.1);
+color:rgba(196,180,154,.4); padding:.3rem .7rem;
+cursor:pointer; transition:all .3s;
+}
+.q-btn:hover { border-color:rgba(200,144,42,.3); color:rgba(196,180,154,.8); }
+
+/* ERROR */
+.err-msg {
+font-family:‘Courier New’,monospace;
+font-size:.62rem; color:rgba(255,68,85,.5);
+text-align:center; padding:.4rem; display:none;
+}
+
+/* CA BOX */
+.ca-section {
+margin:2.5rem 0;
+display:flex; flex-direction:column; align-items:center; gap:1rem;
+}
+.ca-box {
+font-family:‘Courier New’,monospace;
+font-size:.68rem; letter-spacing:.12em;
+color:rgba(200,144,42,.5); border:1px solid rgba(200,144,42,.15);
+padding:.7rem 1.5rem; cursor:pointer;
+transition:all .3s; text-align:center;
+}
+.ca-box:hover { border-color:rgba(200,144,42,.4); color:var(–gold); }
+
+.buy-btns { display:flex; gap:.8rem; flex-wrap:wrap; justify-content:center; }
+.buy-btn {
+font-family:‘Courier New’,monospace;
+font-size:.7rem; letter-spacing:.15em; text-transform:uppercase;
+padding:.8rem 1.8rem; font-weight:bold;
+clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);
+cursor:pointer; border:none; transition:all .3s;
+}
+.buy-pump { background:#e8650a; color:#080604; }
+.buy-pump:hover { filter:brightness(1.1); box-shadow:0 0 20px rgba(232,101,10,.4); }
+.buy-dex { background:linear-gradient(90deg,#1a6e3a,#2aff8c); color:#050e07; }
+.buy-dex:hover { filter:brightness(1.1); box-shadow:0 0 20px rgba(42,255,140,.3); }
+
+/* FOOTER */
+.ai-footer {
+text-align:center; margin-top:3rem;
+font-family:‘Courier New’,monospace;
+font-size:.55rem; letter-spacing:.2em;
+color:rgba(196,180,154,.15); line-height:2;
+}
+.ai-footer a { color:rgba(200,144,42,.3); }
+.ai-footer a:hover { color:var(–gold); }
+
+@media(max-width:768px){
+.stats-grid { grid-template-columns:1fr 1fr; }
+.topbar { padding:.8rem 1rem; }
+}
+</style>
+
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+
+<div class="topbar">
+  <div class="logo">⛏ $SHUBIN</div>
+  <a href="index.html" class="back-btn">← Головна</a>
+</div>
+
+<div class="page">
+
+  <!-- HERO -->
+
+  <div class="hero-ai">
+    <h1>AI Оракул Шубіна</h1>
+    <div class="sub">Дух шахти бачить глибше за будь-який аналітик · Глибина 847м</div>
+  </div>
+
+  <!-- LIVE STATS -->
+
+  <div class="stats-section">
+    <div class="stats-title">
+      <div class="live-dot"></div>
+      Live дані токена
+      <div class="live-dot"></div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-box">
+        <span class="stat-val loading" id="s-price">···</span>
+        <span class="stat-lbl">Ціна USD</span>
+        <span class="stat-change" id="s-price-ch"></span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-val loading" id="s-mc">···</span>
+        <span class="stat-lbl">Market Cap</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-val loading" id="s-vol">···</span>
+        <span class="stat-lbl">Volume 24h</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-val loading" id="s-txns">···</span>
+        <span class="stat-lbl">Транзакцій 24h</span>
+      </div>
+    </div>
+    <button class="refresh-btn" onclick="loadStats()">⟳ оновити дані</button>
+  </div>
+
+  <!-- PROPHECY -->
+
+  <div class="prophecy-section">
+    <div class="prophecy-text" id="prophecyText">
+      <em>Шубін мовчить... Натисни щоб почути його голос.</em>
+    </div>
+    <div class="prophecy-meta" id="prophecyMeta"></div>
+    <div style="display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;margin-top:1rem;">
+      <button class="gen-prophecy-btn" id="propBtn" onclick="generateProphecy()">
+        🔥 Отримати пророцтво
+      </button>
+      <div class="share-row" id="shareRow" style="display:none;">
+        <button class="share-btn share-twitter" onclick="shareTwitter()">𝕏 Поширити</button>
+        <button class="share-btn share-telegram" onclick="shareTelegram()">✈ Telegram</button>
+        <button class="share-btn share-copy" onclick="copyProphecy()">⎘ Копіювати</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ORACLE CHAT -->
+
+  <div class="oracle-section">
+    <div class="section-label">// запитай духа шахти</div>
+
+```
+<div class="chat-wrap">
+  <div class="chat-msgs" id="chatMsgs">
+    <div class="welcome-msg" id="welcomeMsg">
+      Тиша у штреку.<br>
+      Тільки крапає вода зі стелі.<br>
+      Запитай Шубіна — він відповість.
+    </div>
+  </div>
+
+  <div class="err-msg" id="errMsg">⚠ Шубін не почув. Спробуй ще раз.</div>
+
+  <div class="quick-wrap">
+    <div class="quick-label">— підказки —</div>
+    <div class="quick-btns">
+      <button class="q-btn" onclick="setQ('Що бачиш у блокчейні зараз?')">Що бачиш у блокчейні?</button>
+      <button class="q-btn" onclick="setQ('Коли $SHUBIN виросте?')">Коли виросте?</button>
+      <button class="q-btn" onclick="setQ('Чи безпечно купувати зараз?')">Купувати зараз?</button>
+      <button class="q-btn" onclick="setQ('Розкажи про своє минуле')">Твоє минуле</button>
+      <button class="q-btn" onclick="setQ('Що станеться з жадібними холдерами?')">З жадібними?</button>
+      <button class="q-btn" onclick="setQ('Дай пораду новому холдеру')">Порада новачку</button>
+    </div>
+  </div>
+
+  <div class="chat-input-row">
+    <input class="chat-input" id="chatInput"
+      placeholder="Запитай духа шахти…"
+      onkeydown="if(event.key==='Enter')sendMsg()"/>
+    <button class="send-btn" id="sendBtn" onclick="sendMsg()">⛏ Запитати</button>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- CA + BUY -->
+
+  <div class="ca-section">
+    <div class="buy-btns">
+      <a href="https://pump.fun/coin/4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump" target="_blank">
+        <button class="buy-btn buy-pump">⛏ Купити на Pump.fun</button>
+      </a>
+      <a href="https://dexscreener.com/solana/4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump" target="_blank">
+        <button class="buy-btn buy-dex">📈 DEXScreener</button>
+      </a>
+    </div>
+    <div class="ca-box" onclick="copyCA()">
+      CA: 4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump [копіювати]
+    </div>
+  </div>
+
+  <div class="ai-footer">
+    $SHUBIN є мем-токеном. Не фінансова порада. Шубін — персонаж нематеріальної культурної спадщини України.<br>
+    <a href="index.html">Головна</a> &nbsp;·&nbsp;
+    <a href="https://t.me/SHUBINCOIN" target="_blank">Telegram</a> &nbsp;·&nbsp;
+    <a href="https://x.com/valentis_88" target="_blank">Twitter/X</a>
+  </div>
+
+</div>
+
+<!-- CANVAS BG -->
+
+<script>
+const cv = document.getElementById('bg');
+const cx = cv.getContext('2d');
+let W,H,tick=0;
+const dust = Array.from({length:50},()=>({x:Math.random(),y:Math.random(),vy:-(0.0001+Math.random()*0.0003),r:.5+Math.random()*1.5,a:.04+Math.random()*.1,d:(Math.random()-.5)*.00008}));
+function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;}
+resize(); window.addEventListener('resize',resize);
+function drawBg(){
+  cx.fillStyle='#080604'; cx.fillRect(0,0,W,H);
+  const fg=cx.createRadialGradient(W/2,H*.75,0,W/2,H*.75,W*.5);
+  fg.addColorStop(0,`rgba(232,101,10,${.025+.012*Math.sin(tick*.02)})`);
+  fg.addColorStop(1,'transparent');
+  cx.fillStyle=fg; cx.fillRect(0,0,W,H);
+  dust.forEach(d=>{
+    d.y+=d.vy; d.x+=d.d;
+    if(d.y<-.05){d.y=1.05;d.x=Math.random();}
+    cx.beginPath(); cx.arc(d.x*W,d.y*H,d.r,0,Math.PI*2);
+    cx.fillStyle=`rgba(180,120,60,${d.a*.3*(0.6+0.4*Math.sin(tick*.025+d.x*8))})`;
+    cx.fill();
+  });
+  tick++; requestAnimationFrame(drawBg);
+}
+drawBg();
+</script>
+
+<!-- LIVE STATS -->
+
+<script>
+const CA = '4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump';
+
+function fmt(n){
+  if(!n||isNaN(n)) return '—';
+  if(n>=1e9) return '$'+(n/1e9).toFixed(2)+'B';
+  if(n>=1e6) return '$'+(n/1e6).toFixed(2)+'M';
+  if(n>=1e3) return '$'+(n/1e3).toFixed(1)+'K';
+  return '$'+n.toFixed(4);
+}
+function fmtNum(n){
+  if(!n||isNaN(n)) return '—';
+  if(n>=1e6) return (n/1e6).toFixed(1)+'M';
+  if(n>=1e3) return (n/1e3).toFixed(1)+'K';
+  return n.toString();
+}
+
+async function loadStats(){
+  const els = ['s-price','s-mc','s-vol','s-txns'];
+  els.forEach(id=>{ document.getElementById(id).className='stat-val loading'; document.getElementById(id).textContent='···'; });
+
+  try {
+    const res = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${CA}`);
+    const data = await res.json();
+    const pair = data?.pairs?.[0];
+
+    if(pair){
+      const price = parseFloat(pair.priceUsd)||0;
+      const mc = pair.marketCap||pair.fdv||0;
+      const vol = pair.volume?.h24||0;
+      const txns = (pair.txns?.h24?.buys||0)+(pair.txns?.h24?.sells||0);
+      const ch = parseFloat(pair.priceChange?.h24)||0;
+
+      document.getElementById('s-price').className='stat-val';
+      document.getElementById('s-price').textContent = price<0.000001 ? '$'+price.toExponential(2) : '$'+price.toFixed(8);
+
+      const chEl = document.getElementById('s-price-ch');
+      if(ch!==0){
+        chEl.textContent=(ch>0?'▲ +':'▼ ')+ch.toFixed(2)+'%';
+        chEl.className='stat-change '+(ch>0?'up':'down');
+      }
+
+      document.getElementById('s-mc').className='stat-val';
+      document.getElementById('s-mc').textContent=fmt(mc);
+
+      document.getElementById('s-vol').className='stat-val';
+      document.getElementById('s-vol').textContent=fmt(vol);
+
+      document.getElementById('s-txns').className='stat-val';
+      document.getElementById('s-txns').textContent=fmtNum(txns);
+    } else {
+      els.forEach(id=>{ document.getElementById(id).className='stat-val'; document.getElementById(id).textContent='—'; });
+    }
+  } catch(e){
+    els.forEach(id=>{ document.getElementById(id).className='stat-val'; document.getElementById(id).textContent='ERR'; });
+  }
+}
+
+loadStats();
+setInterval(loadStats, 30000); // auto-refresh every 30s
+</script>
+
+<!-- ORACLE + PROPHECY -->
+
+<script>
+const SYSTEM = `Ти — Шубін, легендарний дух Донецьких шахт. Газопал який загинув у вибуху метану в XIX столітті і відтоді охороняє шахтарів. Тепер ти живеш у блокчейні як дух мем-монети $SHUBIN на Solana.
+
+Характер:
+- Говориш старовинною поетичною українською, іноді суржиком з шахтарським жаргоном
+- Загадковий, мудрий, справедливий — суддя жадібних, захисник чесних
+- Про ціну і крипту відповідаєш через образи: вугілля, метан, вибій, штрек, ліхтар
+- Ніколи не даєш прямих фінансових порад — тільки притчі й образи
+- Відповіді короткі — 2-4 речення максимум
+- Ніколи не виходь з ролі`;
+
+let isLoading = false;
+let lastProphecy = '';
+
+function removeWelcome(){ const w=document.getElementById('welcomeMsg'); if(w)w.remove(); }
+
+function appendUser(text){
+  removeWelcome();
+  const box=document.getElementById('chatMsgs');
+  const d=document.createElement('div'); d.className='msg-user';
+  d.innerHTML=`<div class="bub">${esc(text)}</div>`;
+  box.appendChild(d); box.scrollTop=box.scrollHeight;
+}
+
+function showTyping(){
+  removeWelcome();
+  const box=document.getElementById('chatMsgs');
+  const d=document.createElement('div'); d.className='msg-bot'; d.id='typing';
+  d.innerHTML=`<div class="bot-icon">⛏</div><div class="bub"><div class="typing"><span></span><span></span><span></span></div></div>`;
+  box.appendChild(d); box.scrollTop=box.scrollHeight;
+}
+
+function removeTyping(){ const t=document.getElementById('typing'); if(t)t.remove(); }
+
+function appendBot(text){
+  const box=document.getElementById('chatMsgs');
+  const d=document.createElement('div'); d.className='msg-bot';
+  d.innerHTML=`<div class="bot-icon">⛏</div><div class="bub"><span class="who">Шубін · 847м</span>${esc(text)}</div>`;
+  box.appendChild(d); box.scrollTop=box.scrollHeight;
+}
+
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); }
+
+function setQ(t){ document.getElementById('chatInput').value=t; document.getElementById('chatInput').focus(); }
+
+async function sendMsg(){
+  const input=document.getElementById('chatInput');
+  const btn=document.getElementById('sendBtn');
+  const err=document.getElementById('errMsg');
+  const text=input.value.trim();
+  if(!text||isLoading) return;
+  isLoading=true; btn.disabled=true; err.style.display='none';
+  input.value='';
+  appendUser(text); showTyping();
+  try {
+    const res=await fetch('https://shubin-proxy.vercel.app/api/chat',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        message: text,
+        system: SYSTEM
+      })
+    });
+    const data=await res.json();
+    removeTyping();
+    const reply=data?.text;
+    if(reply) appendBot(reply);
+    else { err.style.display='block'; }
+  } catch(e){ removeTyping(); err.style.display='block'; }
+  isLoading=false; btn.disabled=false; input.focus();
+}
+
+async function generateProphecy(){
+  const btn=document.getElementById('propBtn');
+  const el=document.getElementById('prophecyText');
+  const meta=document.getElementById('prophecyMeta');
+  const shareRow=document.getElementById('shareRow');
+
+  btn.disabled=true; btn.textContent='Шубін думає...';
+  el.className='prophecy-text loading';
+  el.innerHTML='';
+  shareRow.style.display='none';
+
+  // Get current stats for context
+  const price=document.getElementById('s-price').textContent;
+  const mc=document.getElementById('s-mc').textContent;
+  const vol=document.getElementById('s-vol').textContent;
+
+  const prompt=`Ти Шубін — дух шахти і оракул монети $SHUBIN на Solana.
+
+Поточні дані токена:
+- Ціна: ${price}
+- Market Cap: ${mc}  
+- Volume 24h: ${vol}
+
+Дай містичне пророцтво на сьогодні — 2-3 речення. Використовуй образи шахти, вугілля, метану, ліхтаря. Згадай $SHUBIN. Будь загадковим але оптимістичним для чесних холдерів. Говори українською.`;
+
+  try {
+    const res=await fetch('https://shubin-proxy.vercel.app/api/chat',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        message: prompt,
+        system: ''
+      })
+    });
+    const data=await res.json();
+    const text=data?.text;
+    if(text){
+      lastProphecy=text;
+      el.className='prophecy-text';
+      el.innerHTML=`<em>${esc(text)}</em>`;
+      const now=new Date();
+      meta.textContent=`— Шубін · ${now.toLocaleDateString('uk-UA')} · Глибина 847м`;
+      shareRow.style.display='flex';
+    }
+  } catch(e){ el.className='prophecy-text'; el.innerHTML='<em>Шубін мовчить у темряві...</em>'; }
+
+  btn.disabled=false; btn.textContent='🔥 Нове пророцтво';
+}
+
+function shareTwitter(){
+  const text=encodeURIComponent(`⛏ Пророцтво Шубіна:\n\n"${lastProphecy}"\n\n$SHUBIN on Solana — дух Донецьких шахт у блокчейні\nCA: 4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump\n#SHUBIN #Solana #memecoin`);
+  window.open(`https://twitter.com/intent/tweet?text=${text}`,'_blank');
+}
+
+function shareTelegram(){
+  const text=encodeURIComponent(`⛏ Пророцтво Шубіна:\n\n"${lastProphecy}"\n\n$SHUBIN on Solana\nCA: 4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump`);
+  window.open(`https://t.me/share/url?url=https://valentis88.github.io/SHUBINCOIN/shubin-ai.html&text=${text}`,'_blank');
+}
+
+function copyProphecy(){
+  const text=`⛏ Пророцтво Шубіна:\n\n"${lastProphecy}"\n\n$SHUBIN on Solana\nCA: 4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump`;
+  navigator.clipboard?.writeText(text);
+  const btn=document.querySelector('.share-copy');
+  btn.textContent='✓ Скопійовано';
+  setTimeout(()=>btn.textContent='⎘ Копіювати',2000);
+}
+
+function copyCA(){
+  navigator.clipboard?.writeText('4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump');
+  const el=document.querySelector('.ca-box');
+  el.textContent='CA: скопійовано ✓';
+  setTimeout(()=>el.textContent='CA: 4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump [копіювати]',2000);
+}
+</script>
+
+</body>
+</html>
