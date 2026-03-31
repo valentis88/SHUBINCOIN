@@ -1033,105 +1033,138 @@ document.addEventListener('DOMContentLoaded',function(){
 });
 </script>
 
-<script>
-// ——— INLINE ORACLE ———
-const ORACLE_SYS = `Ти — Шубін, легендарний дух Донецьких шахт. Газопал який загинув у вибуху метану в XIX столітті. Тепер живеш у блокчейні як дух монети $SHUBIN на Solana.
-Говориш старовинною поетичною українською. Загадковий, мудрий. Відповіді 2-3 речення максимум. Ніколи не виходь з ролі.`;
-
-const PROXY = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyAHcLR7vTZJd4bB-nfyNisqXlWs2IqX8_k';
-let oLoading = false;
-let lastProp = '';
-
-function oRemoveWelcome(){ const w=document.getElementById('oWelcome'); if(w)w.remove(); }
-
-function oAppendUser(text){
-  oRemoveWelcome();
-  const box=document.getElementById('oMsgs');
-  const d=document.createElement('div'); d.className='o-user';
-  d.innerHTML='<div class="bub">'+text.replace(/</g,'&lt;')+'</div>';
-  box.appendChild(d); box.scrollTop=box.scrollHeight;
-}
-
-function oShowTyping(){
-  oRemoveWelcome();
-  const box=document.getElementById('oMsgs');
-  const d=document.createElement('div'); d.className='o-bot'; d.id='oTyping';
-  d.innerHTML='<div class="o-bot-icon">⛏</div><div class="bub"><div class="o-typing"><span></span><span></span><span></span></div></div>';
-  box.appendChild(d); box.scrollTop=box.scrollHeight;
-}
-
-function oRemoveTyping(){ const t=document.getElementById('oTyping'); if(t)t.remove(); }
-
-function oAppendBot(text){
-  const box=document.getElementById('oMsgs');
-  const d=document.createElement('div'); d.className='o-bot';
-  d.innerHTML='<div class="o-bot-icon">⛏</div><div class="bub"><span class="who">Шубін · 847м</span>'+text.replace(/</g,'&lt;')+'</div>';
-  box.appendChild(d); box.scrollTop=box.scrollHeight;
-}
-
-function oSetQ(t){ document.getElementById('oInput').value=t; document.getElementById('oInput').focus(); }
-
-async function oSend(){
-  const input=document.getElementById('oInput');
-  const btn=document.getElementById('oSendBtn');
-  const err=document.getElementById('oErr');
-  const text=input.value.trim();
-  if(!text||oLoading) return;
-  oLoading=true; btn.disabled=true; err.style.display='none';
-  input.value='';
-  oAppendUser(text); oShowTyping();
-  try {
-    const GEMINI_KEY = 'AIzaSyAHcLR7vTZJd4bB-nfyNisqXlWs2IqX8_k';
-    const sysAndMsg = ORACLE_SYS + '
-
-Запит: ' + text;
-    const res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='+GEMINI_KEY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:sysAndMsg}]}],generationConfig:{temperature:0.9,maxOutputTokens:300}})});
-    const data=await res.json();
-    oRemoveTyping();
-    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-    if(reply) oAppendBot(reply);
-    else err.style.display='block';
-  } catch(e){ oRemoveTyping(); err.style.display='block'; }
-  oLoading=false; btn.disabled=false;
-}
-
-async function getProphecy(){
-  const btn=document.getElementById('propBtn');
-  const box=document.getElementById('prophecyBox');
-  const el=document.getElementById('prophecyText');
-  btn.disabled=true; btn.textContent='Шубін думає...';
-  box.style.display='none';
-  const price=document.getElementById('s-price')?.textContent||'невідома';
-  const mc=document.getElementById('s-mc')?.textContent||'невідомий';
-  const prompt=`Ти Шубін — оракул монети $SHUBIN. Ціна зараз: ${price}, Market Cap: ${mc}. Дай містичне пророцтво на сьогодні — 2-3 речення через образи шахти і вугілля. Говори українською.`;
-  try {
-    const GEMINI_KEY2 = 'AIzaSyAHcLR7vTZJd4bB-nfyNisqXlWs2IqX8_k';
-    const res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='+GEMINI_KEY2,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.9,maxOutputTokens:300}})});
-    const data=await res.json();
-    const respText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-    if(respText){
-      lastProp=respText;
-      el.textContent=respText;
-      box.style.display='block';
-    }
-  } catch(e){ el.textContent='Шубін мовчить у темряві...'; box.style.display='block'; }
-  btn.disabled=false; btn.textContent='🔥 Нове пророцтво';
-}
-
-function sharePropTw(){
-  const t=encodeURIComponent('⛏ Пророцтво Шубіна:\n\n"'+lastProp+'"\n\n$SHUBIN on Solana\nCA: 4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump\n#SHUBIN #Solana #memecoin');
-  window.open('https://twitter.com/intent/tweet?text='+t,'_blank');
-}
-function sharePropTg(){
-  const t=encodeURIComponent('⛏ Пророцтво Шубіна:\n\n"'+lastProp+'"\n\n$SHUBIN on Solana\nCA: 4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump');
-  window.open('https://t.me/share/url?url=https://valentis88.github.io/SHUBINCOIN&text='+t,'_blank');
-}
-function copyProp(){
-  navigator.clipboard?.writeText('⛏ Пророцтво Шубіна:\n\n"'+lastProp+'"\n\n$SHUBIN on Solana\nCA: 4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump');
-  const b=document.getElementById('cpBtn'); b.textContent='✓ Скопійовано';
-  setTimeout(()=>b.textContent='⎘ Копіювати',2000);
-}
-</script>
-
 </body>
 </html>
+
+<script>
+var GEMINI_KEY = 'AIzaSyAHcLR7vTZJd4bB-nfyNisqXlWs2IqX8_k';
+var GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + GEMINI_KEY;
+var SHUBIN_SYSTEM = 'Ty — Shubin, dukh donetsʹkykh shakht. Hazopal shcho zahynuv u vybukhу metanu v XIX stolitti. Teper ty zhyvesh u blokcheini yak dukh monety $SHUBIN na Solana. Vidpovidaiy starovynnoyu ukrainsʹkoyu. Korotko — 2-3 rechennya. Zahaquychy, mudro. Pro tsinu — cherez obrazy vulillya i vohniu.';
+var oLoading = false;
+var lastProp = '';
+
+function oSetQ(t) {
+  document.getElementById('oInput').value = t;
+  document.getElementById('oInput').focus();
+}
+
+function oRemoveWelcome() {
+  var w = document.getElementById('oWelcome');
+  if (w) w.remove();
+}
+
+function oAppendUser(text) {
+  oRemoveWelcome();
+  var box = document.getElementById('oMsgs');
+  var d = document.createElement('div');
+  d.className = 'o-user';
+  d.innerHTML = '<div class="bub">' + text.replace(/</g,'&lt;') + '</div>';
+  box.appendChild(d);
+  box.scrollTop = box.scrollHeight;
+}
+
+function oShowTyping() {
+  oRemoveWelcome();
+  var box = document.getElementById('oMsgs');
+  var d = document.createElement('div');
+  d.className = 'o-bot';
+  d.id = 'oTyping';
+  d.innerHTML = '<div class="o-bot-icon">⛏</div><div class="bub"><div class="o-typing"><span></span><span></span><span></span></div></div>';
+  box.appendChild(d);
+  box.scrollTop = box.scrollHeight;
+}
+
+function oRemoveTyping() {
+  var t = document.getElementById('oTyping');
+  if (t) t.remove();
+}
+
+function oAppendBot(text) {
+  var box = document.getElementById('oMsgs');
+  var d = document.createElement('div');
+  d.className = 'o-bot';
+  d.innerHTML = '<div class="o-bot-icon">⛏</div><div class="bub"><span class="who">Shubin · 847m</span>' + text.replace(/</g,'&lt;') + '</div>';
+  box.appendChild(d);
+  box.scrollTop = box.scrollHeight;
+}
+
+function oSend() {
+  var input = document.getElementById('oInput');
+  var btn = document.getElementById('oSendBtn');
+  var err = document.getElementById('oErr');
+  var text = input.value.trim();
+  if (!text || oLoading) return;
+  oLoading = true;
+  btn.disabled = true;
+  err.style.display = 'none';
+  input.value = '';
+  oAppendUser(text);
+  oShowTyping();
+  var prompt = SHUBIN_SYSTEM + '\n\nZapyt: ' + text;
+  fetch(GEMINI_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.9, maxOutputTokens: 300 } })
+  }).then(function(r) { return r.json(); }).then(function(data) {
+    oRemoveTyping();
+    var reply = data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] ? data.candidates[0].content.parts[0].text : '';
+    if (reply) oAppendBot(reply);
+    else err.style.display = 'block';
+    oLoading = false;
+    btn.disabled = false;
+  }).catch(function() {
+    oRemoveTyping();
+    err.style.display = 'block';
+    oLoading = false;
+    btn.disabled = false;
+  });
+}
+
+function getProphecy() {
+  var btn = document.getElementById('propBtn');
+  var box = document.getElementById('prophecyBox');
+  var el = document.getElementById('prophecyText');
+  btn.disabled = true;
+  btn.textContent = 'Shubin dumaye...';
+  box.style.display = 'none';
+  var price = (document.getElementById('s-price') || {}).textContent || '?';
+  var mc = (document.getElementById('s-mc') || {}).textContent || '?';
+  var prompt = 'Ty Shubin — orakul monety $SHUBIN. Tsina: ' + price + ', Market Cap: ' + mc + '. Day mistychne prorоtstvo na sʹohodni — 2-3 rechennya cherez obrazy shakhtу i vulillya. Hovory ukrayinsʹkoyu.';
+  fetch(GEMINI_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.9, maxOutputTokens: 300 } })
+  }).then(function(r) { return r.json(); }).then(function(data) {
+    var text = data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] ? data.candidates[0].content.parts[0].text : '';
+    if (text) {
+      lastProp = text;
+      el.textContent = text;
+      box.style.display = 'block';
+    }
+    btn.disabled = false;
+    btn.textContent = 'Nove prorотstvo';
+  }).catch(function() {
+    el.textContent = 'Shubin movchytʹ...';
+    box.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Nove prorотstvo';
+  });
+}
+
+function sharePropTw() {
+  var t = encodeURIComponent('Prorotstvo Shubina:\n\n"' + lastProp + '"\n\n$SHUBIN on Solana\nCA: 4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump\n#SHUBIN #Solana #memecoin');
+  window.open('https://twitter.com/intent/tweet?text=' + t, '_blank');
+}
+
+function sharePropTg() {
+  var t = encodeURIComponent('Prorotstvo Shubina:\n\n"' + lastProp + '"\n\n$SHUBIN on Solana\nCA: 4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump');
+  window.open('https://t.me/share/url?url=https://valentis88.github.io/SHUBINCOIN&text=' + t, '_blank');
+}
+
+function copyProp() {
+  var text = 'Prorotstvo Shubina:\n\n"' + lastProp + '"\n\n$SHUBIN on Solana\nCA: 4cCpV73uoykNvJHzuA5ELA64njruDTi8F8xfCTZipump';
+  if (navigator.clipboard) navigator.clipboard.writeText(text);
+  var b = document.getElementById('cpBtn');
+  if (b) { b.textContent = 'Skopiiovano'; setTimeout(function() { b.textContent = 'Kopiiuvaty'; }, 2000); }
+}
+</script>
