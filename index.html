@@ -1038,7 +1038,7 @@ document.addEventListener('DOMContentLoaded',function(){
 const ORACLE_SYS = `Ти — Шубін, легендарний дух Донецьких шахт. Газопал який загинув у вибуху метану в XIX столітті. Тепер живеш у блокчейні як дух монети $SHUBIN на Solana.
 Говориш старовинною поетичною українською. Загадковий, мудрий. Відповіді 2-3 речення максимум. Ніколи не виходь з ролі.`;
 
-const PROXY = 'https://shubin-proxy.vercel.app/api/chat';
+const PROXY = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyAHcLR7vTZJd4bB-nfyNisqXlWs2IqX8_k';
 let oLoading = false;
 let lastProp = '';
 
@@ -1081,10 +1081,15 @@ async function oSend(){
   input.value='';
   oAppendUser(text); oShowTyping();
   try {
-    const res=await fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,system:ORACLE_SYS})});
+    const GEMINI_KEY = 'AIzaSyAHcLR7vTZJd4bB-nfyNisqXlWs2IqX8_k';
+    const sysAndMsg = ORACLE_SYS + '
+
+Запит: ' + text;
+    const res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='+GEMINI_KEY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:sysAndMsg}]}],generationConfig:{temperature:0.9,maxOutputTokens:300}})});
     const data=await res.json();
     oRemoveTyping();
-    if(data.text) oAppendBot(data.text);
+    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if(reply) oAppendBot(reply);
     else err.style.display='block';
   } catch(e){ oRemoveTyping(); err.style.display='block'; }
   oLoading=false; btn.disabled=false;
@@ -1100,11 +1105,13 @@ async function getProphecy(){
   const mc=document.getElementById('s-mc')?.textContent||'невідомий';
   const prompt=`Ти Шубін — оракул монети $SHUBIN. Ціна зараз: ${price}, Market Cap: ${mc}. Дай містичне пророцтво на сьогодні — 2-3 речення через образи шахти і вугілля. Говори українською.`;
   try {
-    const res=await fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:prompt,system:''})});
+    const GEMINI_KEY2 = 'AIzaSyAHcLR7vTZJd4bB-nfyNisqXlWs2IqX8_k';
+    const res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='+GEMINI_KEY2,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.9,maxOutputTokens:300}})});
     const data=await res.json();
-    if(data.text){
-      lastProp=data.text;
-      el.textContent=data.text;
+    const respText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if(respText){
+      lastProp=respText;
+      el.textContent=respText;
       box.style.display='block';
     }
   } catch(e){ el.textContent='Шубін мовчить у темряві...'; box.style.display='block'; }
