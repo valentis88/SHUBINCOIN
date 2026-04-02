@@ -1130,7 +1130,7 @@ function getProphecy() {
   box.style.display = 'none';
   var price = (document.getElementById('s-price') || {}).textContent || '?';
   var mc = (document.getElementById('s-mc') || {}).textContent || '?';
-  var prompt = 'Ty Shubin — orakul monety $SHUBIN. Tsina: ' + price + ', Market Cap: ' + mc + '. Day mistychne prorоtstvo na sʹohodni — 2-3 rechennya cherez obrazy shakhtу i vulillya. Hovory ukrayinsʹkoyu.';
+  var prompt = 'Ти Шубін — оракул монети $SHUBIN. Ціна зараз: ' + price + ', Market Cap: ' + mc + '. Дай містичне пророцтво на сьогодні — 2-3 речення через образи шахти і вугілля. Відповідай ТІЛЬКИ українською мовою, кирилицею.';
   fetch(GROQ_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY },
