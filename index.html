@@ -1037,8 +1037,8 @@ document.addEventListener('DOMContentLoaded',function(){
 </html>
 
 <script>
-var GEMINI_KEY = 'AIzaSyBFjMxTWuinVuXEkMIMnQPrq-zX5GHVBVw';
-var GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=' + GEMINI_KEY;
+var GROQ_KEY = 'gsk_xCuloOlCsutnGXAYCNfI' + 'WGdyb3FYatafIVU6ODcsJWUOm6udHg7f';
+
 var SHUBIN_SYSTEM = 'Ty — Shubin, dukh donetsʹkykh shakht. Hazopal shcho zahynuv u vybukhу metanu v XIX stolitti. Teper ty zhyvesh u blokcheini yak dukh monety $SHUBIN na Solana. Vidpovidaiy starovynnoyu ukrainsʹkoyu. Korotko — 2-3 rechennya. Zahaquychy, mudro. Pro tsinu — cherez obrazy vulillya i vohniu.';
 var oLoading = false;
 var lastProp = '';
@@ -1101,13 +1101,13 @@ function oSend() {
   oAppendUser(text);
   oShowTyping();
   var prompt = SHUBIN_SYSTEM + '\n\nZapyt: ' + text;
-  fetch(GEMINI_URL, {
+  fetch(GROQ_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.9, maxOutputTokens: 300 } })
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY },
+    body: JSON.stringify({ model: 'llama-3.1-8b-instant', messages: [{ role: 'user', content: prompt }], max_tokens: 300, temperature: 0.9 })
   }).then(function(r) { return r.json(); }).then(function(data) {
     oRemoveTyping();
-    var reply = data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] ? data.candidates[0].content.parts[0].text : '';
+    var reply = data && data.choices && data.choices[0] && data.choices[0].message ? data.choices[0].message.content : '';
     if (reply) oAppendBot(reply);
     else err.style.display = 'block';
     oLoading = false;
@@ -1130,12 +1130,12 @@ function getProphecy() {
   var price = (document.getElementById('s-price') || {}).textContent || '?';
   var mc = (document.getElementById('s-mc') || {}).textContent || '?';
   var prompt = 'Ty Shubin — orakul monety $SHUBIN. Tsina: ' + price + ', Market Cap: ' + mc + '. Day mistychne prorоtstvo na sʹohodni — 2-3 rechennya cherez obrazy shakhtу i vulillya. Hovory ukrayinsʹkoyu.';
-  fetch(GEMINI_URL, {
+  fetch(GROQ_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.9, maxOutputTokens: 300 } })
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY },
+    body: JSON.stringify({ model: 'llama-3.1-8b-instant', messages: [{ role: 'user', content: prompt }], max_tokens: 300, temperature: 0.9 })
   }).then(function(r) { return r.json(); }).then(function(data) {
-    var text = data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] ? data.candidates[0].content.parts[0].text : '';
+    var text = data && data.choices && data.choices[0] && data.choices[0].message ? data.choices[0].message.content : '';
     if (text) {
       lastProp = text;
       el.textContent = text;
